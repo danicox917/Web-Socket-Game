@@ -1,0 +1,41 @@
+<html>
+<head>
+    <title> This is the User Side</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+  <div id="message"></div>
+  <form id="namer" onsubmit="return false">
+    <input type="text" id="name" name="name">Name:</input>
+    <a onclick="send()"><button>Submit</button></a>
+  </form>
+  <div id="users"></div>
+    <script src="/socket.io/socket.io.js"></script>
+  <script>
+    var socket = io();
+    let nombre = "";
+    let users= 0;
+    function send(){
+      console.log("triggered");
+      nombre = document.getElementByID("name");
+      console.log(nombre);
+      socket.emit("blah",nombre.value);
+    };
+  
+    socket.on("blah",function(blah){
+      //spa = message.toString();
+      console.log(blah);
+      document.getElementById("message").innerHTML = blah;
+    });
+
+    socket.on("users",function(num){
+      users+=num;
+      document.getElementById("users").innerHTML = "There are "+users+" users online.";
+    })
+  </script>
+    <script src="index.js"></script>
+  <script src="app.js"></script>
+</body>
+
+</html>
